@@ -52,7 +52,7 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <h1>Todo App</h1>
+        <h1>TODO List</h1>
         <input
           type="text"
           value={input}
@@ -60,19 +60,26 @@ function App() {
           onKeyPress={handleKeyPress}
           placeholder="Add a new task"
         />
-        <button onClick={handleAddTodo}>Add Todo</button>
+        <button onClick={handleAddTodo}>Add Task</button>
         <ul>
           {todos.map(todo => (
-            <li key={todo.id} 
+            <li key={todo.id} style={{ cursor: 'pointer', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <span 
                 onClick={() => toggleTodoCompletion(todo.id)}
-                style={{ textDecoration: todo.completed ? 'line-through' : 'none', cursor: 'pointer' }}>
-              {todo.text}
+                style={{ textDecoration: todo.completed ? 'line-through' : 'none', flex: 1 }}>
+                {todo.text}
+              </span>
+              <button onClick={(e) => {
+                e.stopPropagation(); 
+                handleDeleteTodo(todo.id);
+              }} style={{ marginLeft: '10px' }}>Delete</button>
             </li>
           ))}
         </ul>
       </header>
     </div>
   );
+  
 }           
 
 export default App;
