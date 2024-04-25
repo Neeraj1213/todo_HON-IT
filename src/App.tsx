@@ -18,6 +18,13 @@ function App() {
     }
   };
 
+
+  const handleDeleteTodo = (id: number) => {
+    const updatedTodos = todos.filter(todo => todo.id !== id);
+    setTodos(updatedTodos);
+  };
+  
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInput(e.target.value);
   };
@@ -42,12 +49,15 @@ function App() {
         <button onClick={handleAddTodo}>Add Todo</button>
         <ul>
           {todos.map(todo => (
-            <li key={todo.id}>{todo.text}</li>
+            <li key={todo.id}>
+              {todo.text}
+              <button onClick={() => handleDeleteTodo(todo.id)} style={{ marginLeft: '10px' }}>Delete</button>
+            </li>
           ))}
         </ul>
       </header>
     </div>
   );
-}
+}            
 
 export default App;
