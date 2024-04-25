@@ -4,23 +4,37 @@ import './App.css';
 interface TodoItem {
   id: number;
   text: string;
+  completed: boolean;
 }
+
 
 function App() {
   const [todos, setTodos] = useState<TodoItem[]>([]);
   const [input, setInput] = useState('');
 
   const handleAddTodo = () => {
-    if (input.trim() !== '') {
-      const newTodo: TodoItem = { id: Date.now(), text: input.trim() };
+    const inputTrimmed = input.trim();
+    if (inputTrimmed !== '' && !todos.some(todo => todo.text === inputTrimmed)) {
+      const newTodo: TodoItem = { id: Date.now(), text: inputTrimmed, completed: false };
       setTodos([...todos, newTodo]);
-      setInput(''); 
+      setInput('');
     }
   };
-
+  
+  
 
   const handleDeleteTodo = (id: number) => {
     const updatedTodos = todos.filter(todo => todo.id !== id);
+    setTodos(updatedTodos);
+  };
+  
+  const toggleTodoCompletion = (id: number) => {
+    const updatedTodos = todos.map(todo => {
+      if (todo.id === id) {
+        return { ...todo, completed: !todo.completed };
+      }
+      return todo;
+    });
     setTodos(updatedTodos);
   };
   
@@ -49,15 +63,16 @@ function App() {
         <button onClick={handleAddTodo}>Add Todo</button>
         <ul>
           {todos.map(todo => (
-            <li key={todo.id}>
+            <li key={todo.id} 
+                onClick={() => toggleTodoCompletion(todo.id)}
+                style={{ textDecoration: todo.completed ? 'line-through' : 'none', cursor: 'pointer' }}>
               {todo.text}
-              <button onClick={() => handleDeleteTodo(todo.id)} style={{ marginLeft: '10px' }}>Delete</button>
             </li>
           ))}
         </ul>
       </header>
     </div>
   );
-}            
+}           
 
 export default App;
